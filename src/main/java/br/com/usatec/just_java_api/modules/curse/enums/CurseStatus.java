@@ -1,4 +1,4 @@
-package br.com.usatec.just_java_api.domain.enums;
+package br.com.usatec.just_java_api.modules.curse.enums;
 
 import java.util.stream.Stream;
 
