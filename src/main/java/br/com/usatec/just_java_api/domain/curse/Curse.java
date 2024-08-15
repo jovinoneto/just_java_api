@@ -1,7 +1,9 @@
 package br.com.usatec.just_java_api.domain.curse;
 
+import br.com.usatec.just_java_api.domain.category.Category;
 import br.com.usatec.just_java_api.domain.enums.CurseStatus;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,8 +16,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 
+
 @Data
-public class Curso {
+@Entity(name = "curse")
+public class Curse {
   
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,9 +30,9 @@ public class Curso {
   @Column(name = "active")
   private CurseStatus curseStatus;
 
-    @ManyToOne()
-  @JoinColumn(name = "categoria_id", nullable = false)
-  private String category;
+  @ManyToOne()
+  @JoinColumn(name = "category_id", insertable = false, updatable = false)
+  private Category category;
 
   @CreationTimestamp
   @Column(name = "created_at")
