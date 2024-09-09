@@ -1,13 +1,12 @@
 package br.com.usatec.just_java_api.exceptions;
 
-
 import br.com.usatec.just_java_api.modules.category.exceptions.CategoryAlreadyExistException;
-import org.postgresql.util.PSQLException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import br.com.usatec.just_java_api.modules.category.exceptions.CategoryInUseException;
+import br.com.usatec.just_java_api.modules.category.exceptions.CategoryNotFoundException;
+import br.com.usatec.just_java_api.modules.course.exceptions.CourseAlreadyExistException;
+import br.com.usatec.just_java_api.modules.course.exceptions.CourseNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -18,28 +17,37 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CategoryAlreadyExistException.class)
-    public ResponseEntity<Map<String, String>> handleCategoryAlreadyExistException(CategoryAlreadyExistException ex) {
-        // Retorna apenas a mensagem personalizada da exceção
-        Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(response); // HTTP 409 para conflitos de recursos
+    public ResponseEntity<ErrorMessageDTO> handleCategoryAlreadyExistException(CategoryAlreadyExistException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorMessageDTO(e.getMessage()));
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        // Coletar os erros de validação para campos específicos
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage()));
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors); // HTTP 400 para erros de validação
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ErrorMessageDTO> handleCategoryNotFoundException(CategoryNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessageDTO(e.getMessage()));
     }
 
+
+    @ExceptionHandler(CategoryInUseException.class)
+    public ResponseEntity<ErrorMessageDTO> handleCategoryInUseException(CategoryInUseException e) {
+        return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body(new ErrorMessageDTO(e.getMessage()));
+    }
+
+
+    @ExceptionHandler(CourseAlreadyExistException.class)
+    public ResponseEntity<ErrorMessageDTO> handleCourseAlreadyExistException(CourseAlreadyExistException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorMessageDTO(e.getMessage()));
+    }
+
+    @ExceptionHandler(CourseNotFoundException.class)
+    public ResponseEntity<ErrorMessageDTO> handleCourseNotFoundException(CourseNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessageDTO(e.getMessage()));
+    }
+
+    // Generic Exception Handler
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
-        // Retorna uma mensagem genérica para outros erros não tratados
         Map<String, String> response = new HashMap<>();
         response.put("error", "An unexpected error occurred: " + ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response); // HTTP 500
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }

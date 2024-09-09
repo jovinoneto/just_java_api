@@ -1,26 +1,24 @@
-package br.com.usatec.just_java_api.modules.curse.entity;
+package br.com.usatec.just_java_api.modules.course.entity;
 
 import br.com.usatec.just_java_api.modules.category.entity.Category;
-import br.com.usatec.just_java_api.modules.curse.enums.CourseStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import br.com.usatec.just_java_api.modules.course.enums.CourseStatus;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+@Entity
+@Table(name = "course")
 @Getter
 @Setter
-@Entity(name = "curse")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Course {
   
   @Id
@@ -31,10 +29,10 @@ public class Course {
   private String name;
 
   @Column(name = "active")
-  private CourseStatus curseStatus;
+  private CourseStatus courseStatus;
 
   @ManyToOne()
-  @JoinColumn(name = "category_id", insertable = false, updatable = false)
+  @JoinColumn(name = "category_id")
   private Category category;
 
   @CreationTimestamp

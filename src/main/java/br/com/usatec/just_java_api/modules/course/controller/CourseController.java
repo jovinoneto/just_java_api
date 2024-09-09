@@ -1,30 +1,53 @@
-package br.com.usatec.just_java_api.modules.curse.controller;
+package br.com.usatec.just_java_api.modules.course.controller;
 
-import br.com.usatec.just_java_api.modules.curse.dto.CourseRequestDTO;
-import br.com.usatec.just_java_api.modules.curse.entity.Course;
-import br.com.usatec.just_java_api.modules.curse.enums.CourseStatus;
+import br.com.usatec.just_java_api.modules.category.repository.CategoryRepository;
+import br.com.usatec.just_java_api.modules.course.dto.CourseListResponseDTO;
+import br.com.usatec.just_java_api.modules.course.dto.CourseRequestDTO;
+import br.com.usatec.just_java_api.modules.course.dto.CourseResponseDTO;
+import br.com.usatec.just_java_api.modules.course.services.CourseService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/course")
 public class CourseController {
 
+    @Autowired
+    private CourseService courseService;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @PostMapping("")
-    public ResponseEntity<Course> createCourse(@Valid @RequestBody CourseRequestDTO body) {
-        Course course = new Course();
+    public ResponseEntity<CourseResponseDTO> createCourse(@Valid @RequestBody  CourseRequestDTO body) {
+        CourseResponseDTO createCourse = courseService.createCourse(body);
 
-        course.setName(body.name());
-        course.setCurseStatus(body.());
-        course.setCreatedAt(LocalDateTime.now());
-        return ResponseEntity.status(201).body(course);
+        return new ResponseEntity<>(createCourse, HttpStatus.CREATED);
+    }
+
+    @GetMapping("")
+    public List<CourseListResponseDTO> getCourseList(@RequestParam String name) {
+
+        return courseService.getListCourse(name);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CourseResponseDTO> updateCourse(@PathVariable("id") UUID id, @Valid @RequestBody CourseRequestDTO body) {
+        CourseResponseDTO responseDTO = courseService.updateCourse(id, body);
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCourse(@PathVariable("id") UUID id) {
+        courseService.deleteCourse(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
