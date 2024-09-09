@@ -2,24 +2,24 @@ package br.com.usatec.just_java_api.modules.curse.enums;
 
 import java.util.stream.Stream;
 
-public enum CurseStatus {
+public enum CourseStatus {
   
   ATIVO(1),
   INATIVO(2);
 
   private int status;
 
-  private CurseStatus(int status) {
+  private CourseStatus(int status) {
     this.status = status;
   }
 
-  public int getCurseStatus() {
+  public int getCourseStatus() {
     return status;
   }
 
-  public static CurseStatus of(int status) {
-    return Stream.of(CurseStatus.values())
-    .filter(p -> p.getCurseStatus() == status)
+  public static CourseStatus of(int status) {
+    return Stream.of(CourseStatus.values())
+    .filter(p -> p.getCourseStatus() == status)
     .findFirst()
     .orElseThrow(IllegalArgumentException::new);
   }

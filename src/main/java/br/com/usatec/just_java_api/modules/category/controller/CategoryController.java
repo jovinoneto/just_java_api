@@ -5,7 +5,6 @@ import br.com.usatec.just_java_api.modules.category.dto.CategoryResponseDTO;
 import br.com.usatec.just_java_api.modules.category.entity.Category;
 import br.com.usatec.just_java_api.modules.category.services.CategoryService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +26,8 @@ public class CategoryController {
     return ResponseEntity.status(201).body(createdCategory);
   }
 
-  @GetMapping("/")
-  public ResponseEntity<List<CategoryResponseDTO>> getCategories(@RequestParam String name) {
+  @GetMapping("")
+  public ResponseEntity<List<CategoryResponseDTO>> getCategories(@Valid @RequestParam String name) {
     List<CategoryResponseDTO> categories = categoryService.getCategories(name);
 
     return ResponseEntity.ok(categories);
@@ -39,5 +38,12 @@ public class CategoryController {
     Category updatedCategory = categoryService.updateCategory(id, body);
 
     return ResponseEntity.ok(updatedCategory);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteCategory(@Valid @PathVariable("id") UUID id) {
+      categoryService.deleteCategory(id);
+
+      return ResponseEntity.noContent().build();
   }
 }

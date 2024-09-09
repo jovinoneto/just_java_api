@@ -1,19 +1,18 @@
 package br.com.usatec.just_java_api.modules.category.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import br.com.usatec.just_java_api.modules.course.entity.Course;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-@Entity(name = "category")
+@Entity
+@Table(name = "category")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,6 +25,9 @@ public class Category {
 
   @NotBlank(message = "Name is mandatory!")
   private String name;
+
+  @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+  private List<Course> courses;
 
   @CreationTimestamp
   @Column(name = "created_at")
