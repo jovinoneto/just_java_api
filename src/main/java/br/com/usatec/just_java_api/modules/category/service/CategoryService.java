@@ -1,4 +1,4 @@
-package br.com.usatec.just_java_api.modules.category.services;
+package br.com.usatec.just_java_api.modules.category.service;
 
 import br.com.usatec.just_java_api.modules.category.dto.CategoryRequestDTO;
 import br.com.usatec.just_java_api.modules.category.dto.CategoryResponseDTO;
@@ -25,11 +25,11 @@ public class CategoryService {
   @Autowired
   private CourseRepository courseRepository;
 
-  public Category createCategory(CategoryRequestDTO categoryDTO) {
-    this.verifyCategoryRegistered(categoryDTO.name());
+  public Category createCategory(CategoryRequestDTO body) {
+    this.verifyCategoryRegistered(body.name());
 
     Category newCategory = new Category();
-    newCategory.setName(categoryDTO.name());
+    newCategory.setName(body.name());
     newCategory.setCreatedAt(LocalDateTime.now());
 
     return this.categoryRepository.save(newCategory);
@@ -76,6 +76,5 @@ public class CategoryService {
 
     if(isCategoryRegister.isPresent())
       throw new CategoryAlreadyExistException();
-
   }
 }

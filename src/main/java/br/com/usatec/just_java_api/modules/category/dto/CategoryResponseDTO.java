@@ -6,4 +6,5 @@ public record CategoryResponseDTO(
   UUID id,
   String name,
   String createdAt,
-  String updatedAd) {}
+  String updatedAd
+) {}

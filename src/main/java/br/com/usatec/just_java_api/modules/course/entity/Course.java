@@ -1,16 +1,14 @@
 package br.com.usatec.just_java_api.modules.course.entity;
 
 import br.com.usatec.just_java_api.modules.category.entity.Category;
-import br.com.usatec.just_java_api.modules.course.enums.CourseStatus;
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "course")
@@ -25,13 +23,13 @@ public class Course {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @NotBlank(message = "Name is mandatory!")
+  @NotBlank(message = "Name is required!")
   private String name;
 
   @Column(name = "active")
-  private CourseStatus courseStatus;
+  private boolean active;
 
-  @ManyToOne()
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id")
   private Category category;
 

@@ -3,7 +3,7 @@ package br.com.usatec.just_java_api.modules.category.controller;
 import br.com.usatec.just_java_api.modules.category.dto.CategoryRequestDTO;
 import br.com.usatec.just_java_api.modules.category.dto.CategoryResponseDTO;
 import br.com.usatec.just_java_api.modules.category.entity.Category;
-import br.com.usatec.just_java_api.modules.category.services.CategoryService;
+import br.com.usatec.just_java_api.modules.category.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

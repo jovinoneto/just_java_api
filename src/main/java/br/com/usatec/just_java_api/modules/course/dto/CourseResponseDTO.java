@@ -1,15 +1,13 @@
 package br.com.usatec.just_java_api.modules.course.dto;
 
-import br.com.usatec.just_java_api.modules.course.enums.CourseStatus;
-
 import java.util.UUID;
 
 public record CourseResponseDTO(
         UUID id,
         String name,
-        CourseStatus courseStatus,
+        boolean active,
         String createdAt,
-        CategoryDTO categories
+        CategoryDTO category
 ) {
 
         public record CategoryDTO(

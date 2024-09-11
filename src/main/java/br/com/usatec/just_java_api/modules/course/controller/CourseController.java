@@ -1,10 +1,8 @@
 package br.com.usatec.just_java_api.modules.course.controller;
 
 import br.com.usatec.just_java_api.modules.category.repository.CategoryRepository;
-import br.com.usatec.just_java_api.modules.course.dto.CourseListResponseDTO;
-import br.com.usatec.just_java_api.modules.course.dto.CourseRequestDTO;
-import br.com.usatec.just_java_api.modules.course.dto.CourseResponseDTO;
-import br.com.usatec.just_java_api.modules.course.services.CourseService;
+import br.com.usatec.just_java_api.modules.course.dto.*;
+import br.com.usatec.just_java_api.modules.course.service.CourseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,17 +29,30 @@ public class CourseController {
         return new ResponseEntity<>(createCourse, HttpStatus.CREATED);
     }
 
-    @GetMapping("")
+    @GetMapping("/search/name")
     public List<CourseListResponseDTO> getCourseList(@RequestParam String name) {
 
-        return courseService.getListCourse(name);
+        return courseService.getSearchNameCourse(name);
+    }
+
+    @GetMapping("")
+    public List<CourseListResponseDTO> getAllCourse() {
+
+        return courseService.getListAllCourse();
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<CourseCategoryResponseDTO> getCourseByCategory(@PathVariable("id") UUID categoryId) {
+
+        CourseCategoryResponseDTO courses = courseService.getListCourseByCategory(categoryId);
+        return ResponseEntity.ok(courses);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CourseResponseDTO> updateCourse(@PathVariable("id") UUID id, @Valid @RequestBody CourseRequestDTO body) {
-        CourseResponseDTO responseDTO = courseService.updateCourse(id, body);
+    public ResponseEntity<CourseUpdateResponseDTO> updateCourse(@PathVariable("id") UUID id, @Valid @RequestBody CourseUpdateRequestDTO body) throws IllegalAccessException {
+        CourseUpdateResponseDTO updateCourse = courseService.updateCourse(id, body);
 
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.ok(updateCourse);
     }
 
     @DeleteMapping("/{id}")
@@ -49,5 +60,12 @@ public class CourseController {
         courseService.deleteCourse(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/active")
+    public ResponseEntity<CourseResponseDTO> activateStatusCourse(@PathVariable("id") UUID id) {
+        CourseResponseDTO courseResponseDTO = courseService.activateStatusCourse(id);
+
+        return ResponseEntity.ok(courseResponseDTO);
     }
 }

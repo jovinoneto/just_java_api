@@ -23,7 +23,7 @@ public class Category {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @NotBlank(message = "Name is mandatory!")
+  @NotBlank(message = "Name is required!")
   private String name;
 
   @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
